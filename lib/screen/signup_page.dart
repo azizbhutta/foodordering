@@ -17,6 +17,7 @@ class _SignUpState extends State<SignUp> {
   RegExp email_valid = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
+  bool loading = false;
    late UserCredential userCredential;
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
@@ -54,45 +55,20 @@ class _SignUpState extends State<SignUp> {
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Error.")));
+      setState(() {
+        loading=false;
+      });
     }
+    setState(() {
+      loading=false;
+    });
   }
 
-  // Future sendData() async {
-  //   try {
-  //     UserCredential userCredential =
-  //         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //       email: email.text,
-  //       password: password.text,
-  //     );
-  //     await FirebaseFirestore.instance.collection('userData').doc(userCredential.user!.uid).set({
-  //       'firstName' : firstName.text.toString(),
-  //       'lastName' : lastName.text.toString(),
-  //       'email' : email.text.toString(),
-  //       'userId' : userCredential.user!.uid,
-  //       'password' : password.text.toString()
-  //     });
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'weak-password') {
-  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //           content: Text("The password provided is too weak.")));
-  //       print('The password provided is too weak.');
-  //     } else if (e.code == 'email-already-in-use') {
-  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //           content: Text("The account already exists for that email.")));
-  //       print('The account already exists for that email.');
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(const SnackBar(content: Text("Error.")));
-  //     print(e);
-  //   }
-  // }
 
   void validation() {
     if (firstName.text.trim().isEmpty || firstName.text.trim() == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("First Name is Empty")));
-
     }
     else if (lastName.text.trim().isEmpty || lastName.text.trim() == null) {
       ScaffoldMessenger.of(context)
@@ -101,18 +77,18 @@ class _SignUpState extends State<SignUp> {
     else if (email.text.trim().isEmpty || email.text.trim() == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Email is Empty")));
-
     } else if (!email_valid.hasMatch(email.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please Enter Valid Email")));
-
     }
     else if (password.text.trim().isEmpty || password.text.trim() == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Password is Empty")));
-
     }
     else{
+      setState(() {
+        loading=true;
+      });
       sendData();
     }
   }
@@ -182,7 +158,13 @@ class _SignUpState extends State<SignUp> {
                 ),
               ],
             ),
-            Row(
+           loading? Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: const [
+               CircularProgressIndicator()
+             ],
+           )
+               : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MaterialButton(
