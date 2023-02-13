@@ -1,9 +1,9 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodordering/provider/my-provider.dart';
+import 'package:foodordering/screen/cart_page.dart';
 import 'package:foodordering/screen/detail_page.dart';
 import 'package:foodordering/screen/home_page.dart';
 import 'package:foodordering/screen/login_page.dart';
@@ -38,8 +38,9 @@ class MyApp extends StatelessWidget {
 
           primarySwatch: Colors.blue,
         ),
-         home: DetailScreen(),
-         // home:  HomePage(),
+         // home : CartScreen(),
+         // home: DetailScreen(),
+           home:  const HomePage(),
       // home: StreamBuilder(
       //     stream: FirebaseAuth.instance.authStateChanges(),
       //     builder: (index, sncpshot) {

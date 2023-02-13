@@ -1,25 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:foodordering/provider/my-provider.dart';
+import 'package:foodordering/screen/home_page.dart';
+import 'package:provider/provider.dart';
 
-class DetailScreen extends StatelessWidget {
-  const DetailScreen({Key? key}) : super(key: key);
+import 'cart_page.dart';
+
+class DetailScreen extends StatefulWidget {
+  final String image;
+  final String name;
+  final num price;
+  const DetailScreen({Key? key, required this.image, required this.name, required this.price,}) : super(key: key);
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  num quantity = 1;
+  @override
   Widget build(BuildContext context) {
+    MyProvider provider = Provider.of<MyProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const HomePage()));
+          },
         ),
       ),
       body: Column(
         children: [
           Expanded(
             child: Container(
-              child: const CircleAvatar(
+              child:  CircleAvatar(
                 radius: 100,
-                backgroundImage: AssetImage('assets/images/1.png'),
+                backgroundImage: NetworkImage(widget.image.toString()),
               ),
             ),
           ),
@@ -37,9 +54,9 @@ class DetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    'Bihari Kabab',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
+                   Text(
+                    widget.name,
+                    style: const TextStyle(fontSize: 40, color: Colors.white),
                   ),
                   const Text(
                     'Spicy',
@@ -50,20 +67,27 @@ class DetailScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Icon(Icons.remove),
+                          GestureDetector(
+                            onTap: (){
+                              setState((){
+                                if (quantity > 1) quantity -- ;
+                              });
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const Icon(Icons.remove),
+                            ),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text(
-                            '1',
-                            style: TextStyle(
+                           Text(
+                            '$quantity',
+                            style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -71,19 +95,26 @@ class DetailScreen extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Icon(Icons.add),
+                          GestureDetector(
+                            onTap: (){
+                              setState((){
+                                quantity ++ ;
+                              });
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const Icon(Icons.add),
+                            ),
                           )
                         ],
                       ),
-                      const Text(
-                        '\$ 150',
-                        style: TextStyle(
+                       Text(
+                        '\$ ${widget.price * quantity}',
+                        style: const TextStyle(
                             fontSize: 25,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
@@ -105,7 +136,18 @@ class DetailScreen extends StatelessWidget {
                     height: 55,
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () { },
+                      onPressed: () {
+                        provider.addToCart(
+                            name: widget.name,
+                            image: widget.image,
+                            price: widget.price,
+                            quantity: quantity);
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                            builder: (context) => CartScreen(),
+                            ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         primary:Color(0xff2b2b2b),
                         shape: RoundedRectangleBorder(
@@ -117,7 +159,7 @@ class DetailScreen extends StatelessWidget {
                         children: const [
                         Icon(Icons.shopping_cart,color: Colors.white,),
                         SizedBox(width: 10,),
-                        Text('Add to Cart', style: TextStyle(color: Colors.white,fontSize: 20),)  
+                        Text('Add to Cart', style: TextStyle(color: Colors.white,fontSize: 20),)
                         ],
                       ),
                     ),
