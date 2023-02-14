@@ -247,4 +247,21 @@ import '../models/foods_model.dart';
        return cartList;
      }
 
+      num totalprice(){
+       num total = 0;
+       cartList.forEach((element) {
+         total +=  element.price*element.quantity;
+       });
+       return total;
+      }
+      late int  deleteIndex;
+     void getDeleteIndex(int index){
+       deleteIndex= index;
+     }
+     void delete(){
+       cartList.removeAt(deleteIndex);
+       notifyListeners();
+     }
+
+
    }

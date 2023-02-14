@@ -75,22 +75,22 @@ class CartScreen extends StatelessWidget {
   }
   Widget build(BuildContext context) {
     MyProvider provider = Provider.of<MyProvider>(context);
-    // num total = provider.totalprice();
+     num total = provider.totalprice();
     return Scaffold(
       bottomNavigationBar: Container(
         margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         height: 65,
         decoration: BoxDecoration(
-            color: Color(0xff3a3e3e), borderRadius: BorderRadius.circular(10)),
+            color: const Color(0xff3a3e3e), borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children:  [
             Text(
-              "\$24 ",
-              style: TextStyle(color: Colors.white, fontSize: 30),
+              "\$ $total",
+              style: const TextStyle(color: Colors.white, fontSize: 30),
             ),
-            Text(
+            const Text(
               "Check Out",
               style: TextStyle(
                   color: Colors.white,
@@ -115,10 +115,10 @@ class CartScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: provider.cartList.length,
         itemBuilder: (ctx, index) {
-          // provider.getDeleteIndex(index);
+           provider.getDeleteIndex(index);
           return cartItem(
             onTap: (){
-              // provider.delete();
+              provider.delete();
             },
             image: provider.cartList[index].image,
             name: provider.cartList[index].name,

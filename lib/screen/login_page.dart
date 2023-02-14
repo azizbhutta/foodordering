@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:foodordering/Widget/text_field.dart';
+import 'package:foodordering/screen/signup_page.dart';
 import 'package:foodordering/screen/welcome_page.dart';
+
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
    LoginPage({Key? key}) : super(key: key);
@@ -30,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
           password: 'Password.text'
       );
     } on FirebaseAuthException catch (e) {
-
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("No user found for that email.")));
@@ -46,6 +48,8 @@ class _LoginPageState extends State<LoginPage> {
         loading=false;
       });
     }
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   void validation(){
@@ -76,12 +80,14 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
           backgroundColor: Colors.black,
-          leading: const IconButton(
-            icon: Icon(
+          leading:  IconButton(
+            icon: const Icon(
               Icons.arrow_back_ios,
               color: Colors.white,
             ),
-            onPressed: null,
+            onPressed: (){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const WelcomePage()));
+            }
           )),
       body: Padding(
         padding: const EdgeInsets.only(left: 40,right: 40),
@@ -106,21 +112,37 @@ class _LoginPageState extends State<LoginPage> {
                 MyTextField(hintText: 'Password', icon: Icons.lock_outline, iconColor: Colors.white, obscureText: true, controller: password,),
               ],
             ),
-            loading? const CircularProgressIndicator() :MaterialButton(
+            loading? const CircularProgressIndicator()
+                :MaterialButton(
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                 elevation: 5.0,
                 minWidth: 200.0,
                 height: 40,
                 color: Colors.grey,
+                 onPressed:
+
+              // () {
+                //   if (globalKey.currentState!.validation()) {
+                //     loginAuth();
+                //   }
+                // },
+                 validation,
                 child: const Text('LogIn',
-                    style:  TextStyle(fontSize: 20.0, color: Colors.white)),
-                onPressed: validation
+                    style:  TextStyle(fontSize: 20.0, color: Colors.white))
                 ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('New User',style: TextStyle(color: Colors.grey),),
-                Text('Register now.',style: TextStyle(color: Colors.red),)
+              children:  [
+                const Text('New User',style: TextStyle(color: Colors.grey),),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  const SignUp()));
+                  },
+                  child: const Text('Register now.',style: TextStyle(color: Colors.red),),
+                )
               ],
             )
           ],

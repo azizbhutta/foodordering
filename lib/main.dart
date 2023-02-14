@@ -38,9 +38,10 @@ class MyApp extends StatelessWidget {
 
           primarySwatch: Colors.blue,
         ),
-         // home : CartScreen(),
-         // home: DetailScreen(),
-           home:  const HomePage(),
+          home : WelcomePage(),
+         // // home : CartScreen(),
+         // // home: DetailScreen(),
+         // //   home:  const HomePage(),
       // home: StreamBuilder(
       //     stream: FirebaseAuth.instance.authStateChanges(),
       //     builder: (index, sncpshot) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodordering/screen/login_page.dart';
+import 'package:foodordering/screen/signup_page.dart';
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -34,7 +35,7 @@ class WelcomePage extends StatelessWidget {
                       child: const Text('LogIn',
                           style:  TextStyle(fontSize: 16.0, color: Colors.white)),
                     onPressed: (){
-                          LoginPage();
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>LoginPage()));
                 }),
 
                 MaterialButton(
@@ -46,6 +47,7 @@ class WelcomePage extends StatelessWidget {
                     child: const Text('SignUp',
                         style:  TextStyle(fontSize: 16.0, color: Colors.blueGrey)),
                     onPressed: (){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const SignUp()));
                     }),
               ],
             ),

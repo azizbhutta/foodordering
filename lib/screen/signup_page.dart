@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodordering/screen/login_page.dart';
+import 'package:foodordering/screen/welcome_page.dart';
 import '../Widget/text_field.dart';
 
 class SignUp extends StatefulWidget {
@@ -62,8 +64,9 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       loading=false;
     });
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) =>  LoginPage()));
   }
-
 
   void validation() {
     if (firstName.text.trim().isEmpty || firstName.text.trim() == null) {
@@ -176,7 +179,9 @@ class _SignUpState extends State<SignUp> {
                     color: Colors.grey,
                     child: const Text('Cancel',
                         style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const WelcomePage()));
+                    }),
                 const SizedBox(
                   width: 20,
                 ),
@@ -187,11 +192,12 @@ class _SignUpState extends State<SignUp> {
                     minWidth: 150.0,
                     height: 40,
                     color: Colors.grey,
-                    child: const Text(
+                    onPressed: validation,
+                    child:  const Text(
                       'Register',
                       style: TextStyle(fontSize: 20.0, color: Colors.white),
-                    ),
-                    onPressed: validation
+                    )
+
                     )
               ],
             )
